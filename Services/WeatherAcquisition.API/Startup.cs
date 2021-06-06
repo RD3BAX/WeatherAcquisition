@@ -1,24 +1,23 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using WeatherAcquisition.DAL.Context;
 
 namespace WeatherAcquisition.API
 {
-    public class Startup
+    public record Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DataDB>(
+                opt => opt
+                    .UseSqlServer(configuration.GetConnectionString("Data"),
+                        o => o.MigrationsAssembly("WeatherAcquisition.DAL.SqlServer")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -3,7 +3,7 @@ using WeatherAcquisition.DAL.Entities;
 
 namespace WeatherAcquisition.DAL.Context
 {
-    class DataDB : DbContext
+    public class DataDB : DbContext
     {
         public DbSet<DataValue> Values { get; set; }
 
