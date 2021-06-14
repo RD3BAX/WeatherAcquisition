@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WeatherAcquisition.DAL.Entities;
 using WeatherAcquisition.Interfaces.Base.Repositories;
@@ -18,6 +19,7 @@ namespace WeatherAcquisition.API.Controllers
         #region Методы
 
         [HttpGet("count")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<IActionResult> GetItemsCount() => Ok(await _Repository.GetCount());
 
         #endregion // Методы
