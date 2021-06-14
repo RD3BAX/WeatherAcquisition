@@ -18,6 +18,11 @@ namespace WeatherAcquisition.DAL.Context
                 .WithOne(v => v.Source)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //// Ограничение что свойство Name обязательно
+            //modelBuilder.Entity<DataSource>()
+            //    .Property(source => source.Name)
+            //    .IsRequired();
+
             //// Индексировать колонку Name и контролировать уникальность значений
             //modelBuilder.Entity<DataSource>()
             //    .HasIndex(source => source.Name)
