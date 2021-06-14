@@ -17,6 +17,11 @@ namespace WeatherAcquisition.DAL.Context
                 .HasMany<DataValue>()
                 .WithOne(v => v.Source)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            //// Индексировать колонку Name и контролировать уникальность значений
+            //modelBuilder.Entity<DataSource>()
+            //    .HasIndex(source => source.Name)
+            //    .IsUnique(true);
         }
 
         #region Конструктор
