@@ -84,9 +84,12 @@ namespace WeatherAcquisition.DAL.Repositories
             //if (PageSize <= 0) return new Page(Enumerable.Empty<T>(), await GetCount(Cancel).ConfigureAwait(false), PageIndex, PageSize);
 
             var query = Items;
-            var total_coutn = await query.CountAsync(Cancel).ConfigureAwait(false);
-            if(total_coutn == 0)
+            var total_count = await query.CountAsync(Cancel).ConfigureAwait(false);
+            if(total_count == 0)
                 return new Page(Enumerable.Empty<T>(), 0, PageIndex, PageSize);
+
+            if (query is not IOrderedQueryable<T>)
+                query = query.OrderBy(item => item.Id);
 
             if (PageIndex > 0)
                 query = query.Skip(PageIndex * PageSize);
@@ -94,7 +97,7 @@ namespace WeatherAcquisition.DAL.Repositories
 
             var items = await query.ToArrayAsync(Cancel).ConfigureAwait(false);
 
-            return new Page(items, total_coutn, PageIndex, PageSize);
+            return new Page(items, total_count, PageIndex, PageSize);
 
         }
 
