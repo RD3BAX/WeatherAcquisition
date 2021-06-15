@@ -24,6 +24,11 @@ namespace WeatherAcquisition.DAL.Repositories
 
         protected virtual IQueryable<T> Items => Set;
 
+        /// <summary>
+        /// Флаг автоматического сохранения в БД
+        /// </summary>
+        public bool AutoSaveChanges { get; set; }
+
         #endregion // Свойства
 
         #region Методы
@@ -119,7 +124,10 @@ namespace WeatherAcquisition.DAL.Repositories
             //_db.Entry(item).State = EntityState.Added;
             //Set.Add(item);
             await _db.AddAsync(item, Cancel).ConfigureAwait(false);
-            await _db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+
+            if (AutoSaveChanges)
+                await SaveChanges(Cancel).ConfigureAwait(false);
+
             return item;
         }
 
@@ -130,7 +138,10 @@ namespace WeatherAcquisition.DAL.Repositories
             //_db.Entry(item).State = EntityState.Modified;
             //Set.Update(item);
             _db.Update(item);
-            await _db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+
+            if (AutoSaveChanges)
+                await SaveChanges(Cancel).ConfigureAwait(false);
+
             return item;
         }
 
@@ -144,7 +155,10 @@ namespace WeatherAcquisition.DAL.Repositories
             //_db.Entry(item).State = EntityState.Deleted;
             //Set.Add(item);
             _db.Remove(item);
-            await _db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+
+            if (AutoSaveChanges)
+                await SaveChanges(Cancel).ConfigureAwait(false);
+
             return item;
 
         }
@@ -165,6 +179,16 @@ namespace WeatherAcquisition.DAL.Repositories
             return await Delete(item, Cancel).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Сохранение накопленных изменений в БД
+        /// </summary>
+        /// <param name="Cancel"></param>
+        /// <returns>Количество внесенных в БД изменений</returns>
+        public async Task<int> SaveChanges(CancellationToken Cancel = default)
+        {
+            return await _db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+        }
+
         #endregion // Методы
 
         #region Конструктор
@@ -173,6 +197,7 @@ namespace WeatherAcquisition.DAL.Repositories
         {
             this._db = db;
             Set = _db.Set<T>();
+            AutoSaveChanges = true;
         }
 
         #endregion // Конструктор
