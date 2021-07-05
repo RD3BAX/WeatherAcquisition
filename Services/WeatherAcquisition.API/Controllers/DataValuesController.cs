@@ -4,17 +4,16 @@ using WeatherAcquisition.Interfaces.Base.Repositories;
 
 namespace WeatherAcquisition.API.Controllers
 {
-    public class DataSourcesController : EntityController<DataSource>
+    public class DataValuesController : EntityController<DataValue>
     {
         #region Поля
 
 
         #endregion // Поля
 
-
         #region Конструктор
 
-        public DataSourcesController(IRepository<DataSource> Repository) : base(Repository) {}
+        public DataValuesController(IRepository<DataValue> Repository) : base(Repository) { }
 
         #endregion // Конструктор
     }
